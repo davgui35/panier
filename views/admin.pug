@@ -1,0 +1,23 @@
+extends layout
+
+block content
+    .card.w-75
+    .card-body.w-100.text-center.bg-light
+        h1.card-title Bienvenue sur votre espace d'administration
+        p.card-text Vous pouvez ajouter des produits avec le formulaire ci-dessous
+    .card.w-100
+    .card-body.bg-light.d-flex.justify-content-center
+        form(action="/admin/ajouter-un-produit", method="POST")
+            .form-group
+                label(for="name") Nom:
+                input(type="text", name="name", id="name").form-control
+            .form-group
+                label(for="description") Description:
+                input(type="text", name="description", id="description").form-control
+            .form-group
+                label(for="image") Image:
+                input(type="text", name="image", id="image").form-control
+            .form-group
+                label(for="price") Prix:
+                input(type="text", name="price", id="price").form-control
+            button(type="submit").btn.btn-primary.mt-2 Ajouter

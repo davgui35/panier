@@ -1,0 +1,27 @@
+extends layout
+
+block content
+    if hasProducts
+        h2 Prix total :  #{totalPrice}€
+        table.table.table-striped
+            thead
+                tr
+                th(scope='col') Nom
+                th(scope='col') Image
+                th(scope='col') Price
+                th(scope='col') Quantité
+            tbody
+                each cartProduct in cartProducts
+                    tr
+                        td= cartProduct.product.name
+                        td
+                            a(href="/produit/"+cartProduct.product.id)
+                                img(src=cartProduct.product.image, alt=cartProduct.product.name, width="140")
+                        td #{cartProduct.product.price}€
+                        td= cartProduct.qty
+                    tr
+    else
+        .card.w-75
+        .card-body.w-100.text-center.bg-light
+            h1.card-title Votre panier est vide
+            p.card-text ☹️

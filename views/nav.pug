@@ -1,0 +1,17 @@
+nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+  .container-fluid
+    if admin 
+      a.navbar-brand(href='/admin') Espace Admin
+    else  
+      a.navbar-brand(href='/') Shop
+    button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarNavAltMarkup' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    .collapse.navbar-collapse#navbarNavAltMarkup
+      if admin
+        .navbar-nav.ml-auto
+          a.nav-link(href='/') Shop
+      else
+        .navbar-nav
+          a.nav-link(href='/', class=(path === '/' ? 'active': '')) Accueil
+          a.nav-link(href='/panier', class=(path === '/panier' ? 'active': '')) Panier
+      

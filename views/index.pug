@@ -1,0 +1,22 @@
+//- Pour intégrer le layout
+extends layout 
+block content
+    .card.w-75
+    .card-body.w-100.text-center.bg-light
+        h1.card-title Bienvenue
+        p.card-text Les produits actuellement disponible:
+    .row
+        each product in products
+            .col-sm-6.col-md-4
+                .card
+                img(src=product.image, alt=product.name).card-img-top.card-body
+                h3.card-title= product.name
+                h5
+                    | Prix : 
+                    span.badge.bg-dark #{product.price}€
+                hr
+                .d-flex
+                    a(href="/produit/" + product.id).btn.btn-outline-dark.btn-sm.mx-2 Voir le produit
+                    form(action="/ajouter-au-panier", method="POST")
+                        input(type="hidden", name="productId", value=product.id)
+                        button(type="submit").btn.btn-outline-dark.btn-sm ajouter au panier
