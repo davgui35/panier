@@ -1,0 +1,81 @@
+//Extension npm fileSystem (read, write)
+const fs = require('fs');
+//Pour les chemins
+const path = require('path');
+//Générer un timestamp d'un id unique
+const {v1: uuidv1} = require('uuid');
+
+//Récupération de la racine
+const appDir = path.dirname(require.main.filename);
+
+//Chemin complet pour aller jusqu'au fichier json
+const p = path.join(appDir, 'data', 'products.json');
+
+//Fonction pour ne pas utiliser plusieurs fois fs.readFile
+const getProductsFromFile = (callback) => {
+    fs.readFile(p, (err, fileContent) => {
+        if(err) {
+            callback([]);
+        } else {
+            callback(JSON.parse(fileContent));
+        }
+    });
+}
+
+class Product {
+
+    constructor(name, description, image, price){
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.price = price;
+    }
+
+    //Enregistrer le produit dans le fichier json
+    save(callback){
+        this.id = uuidv1();
+        // 1.Lire le fichier
+        //2.Option 1: fichier existe déjà => créé un tableau avec le contenu du fichier et ensuite ajouter le nouveau produit
+        //2.Option 2: fichier n'existe pas => on créé un tableau avec à l'intérieur le nouveau produit
+        fs.readFile(p, (err, fileContent)=>{
+            let products = [];
+            //Si Option 1
+            if(!err) {
+                //Création tableau objet
+                products = JSON.parse(fileContent);
+            }
+
+            //this= nouveau produit
+            products.push(this);
+
+            //3.Ecrire dans le fichier
+            // Le premier argument p est le chemin, et ensuite ce qu'on souhaite écrire en format JSON
+            fs.writeFile(p, JSON.stringify(products), err => {
+                if(err) console.log(err);
+                callback();
+            })
+        });
+    }
+
+    //Methode pour trouver tous les produits (static permet d'éviter d'instancier la classe pas de new Product)
+    static findAll(callback){
+        fs.readFile(p, (err, fileContent) => {
+            //Option 2 => on n'a pas de fichier
+            if(err) {
+                callback([]);
+            }else{
+                //Option 1 => on a un fichier on le renvoie
+                callback(JSON.parse(fileContent));
+            }
+        });
+    }
+
+    static findById(id, callback) {
+        fs.readFile(p, (err, fileContent) =>{
+            const product = JSON.parse(fileContent).find(prod => prod.id === id);
+            callback(product);
+        });
+    }
+}
+
+module.exports = Product;
